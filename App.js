@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react' //importando o hook useRef
-import { SafeAreaViewBase, View, StyleSheet, Text, TouchableOpacity, Alert, Platform, Animated, SafeAreaView } from 'react-native'
-import { AntDesign } from '@expo/vector-icons'
-import Writer from './components/Writer'
+import { View, StyleSheet, Text, TouchableOpacity, Alert, Platform, Animated } from 'react-native'
+import { AntDesign } from '@expo/vector-icons' //lib do expo para icones
+import Writer from './components/Writer' //importando o svg já em jsx
 
 //plataform retorna qual a plataforma normal
 //Alert para mobile
@@ -10,11 +10,23 @@ import Writer from './components/Writer'
 
 const TAMANHO_CIRCULO = 100
 
-//criando um componente e definindo seu atributo/elemento
-const MeuComponente = ({ meuElemento, animatedValue }) => {
+/*
+ Criando um componente:
+  MeuComponente é um componente que retorna
+  dois componentes Animated.View, lembrando 
+  que todo elemento sempre começa com a primeira letra 
+  maiúscula. 
+  No que seriam argumentos da arrow function deste
+  componente, é criada uma especie de objeto, onde
+  cada atributo deste objeto será o atributo deste 
+  componente criado, como por exemplo o Atributo style
+  que está presente em todos os componentes.
+  
+ */
+const MeuComponente = ({ meuAtributo, animatedValue }) => {
   const animandoOFundo = animatedValue.interpolate({
     inputRange: [0, 0.0001, 0.5, 0.50001],
-    outputRange: ['#f239', '#a2dca8', '#32dc', '#110333']
+    outputRange: ['#000000', '#2a2f2d', '#32dc', '#1100dd']
   })
 
   const animandoOTexto = animatedValue.interpolate({
@@ -28,17 +40,20 @@ const MeuComponente = ({ meuElemento, animatedValue }) => {
   })
 
   return (
+
     <Animated.View style={[StyleSheet.absoluteFillObject, style.containerCirculo, { backgroundColor: animandoOFundo }]}>
+
       <Text style={style.titulo}>Animações em React native</Text>
+
       <Writer />
-      <Animated.Text
-        style={{
-          fontSize: animandoOTexto,
-          color: animandoACor,
-          margin: 18
-        }}>
-        O segredo de ser um programador é programar!
-     </Animated.Text>
+
+      <Animated.Text 
+      style={{
+        fontSize: animandoOTexto,
+        color: animandoACor,
+        margin: 18
+      }}> O segredo de ser um programador é programar! </Animated.Text>
+
       <Animated.View style={[style.circulo, {
         transform:
           [
@@ -63,7 +78,7 @@ const MeuComponente = ({ meuElemento, animatedValue }) => {
           ]
       }]}>
 
-        <TouchableOpacity onPress={meuElemento}>
+        <TouchableOpacity onPress={meuAtributo}>
 
           <View style={[style.circulo]}>
             <AntDesign name='arrowright' size={28} color={'#8c4227'} />
@@ -81,11 +96,11 @@ export default function App() {
   const animatedValue = useRef(new Animated.Value(0)).current
   const [indice, setIndice] = useState(0)
 
-const animacao = (toValue) => Animated.timing(animatedValue, {
-  toValue: toValue,
-  duration: 3000,
-  useNativeDriver: false
-})
+  const animacao = (toValue) => Animated.timing(animatedValue, {
+    toValue: toValue,
+    duration: 3000,
+    useNativeDriver: false
+  })
 
   const mostrarMsg = () => {
     animacao(indice === 1 ? 0 : 1).start()
@@ -94,7 +109,7 @@ const animacao = (toValue) => Animated.timing(animatedValue, {
 
   return (
     <View style={style.container}>
-      <MeuComponente meuElemento={mostrarMsg} animatedValue={animatedValue} />
+      <MeuComponente meuAtributo={mostrarMsg} animatedValue={animatedValue} />
     </View>
   )
 }
